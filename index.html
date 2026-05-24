@@ -139,8 +139,8 @@ video{width:100%;display:block;object-fit:cover;object-position:top center;}
         <div class="uf-panel-titulo" id="tema-titulo"></div>
         <div class="uf-panel-desc" id="tema-desc"></div>
         <div class="uf-btns">
-          <a class="uf-btn-azul" id="btn-contenido" href="#" target="_top">Ver contenido</a>
-          <a class="uf-btn-gris" id="btn-actividades" href="#" target="_top">Ver actividades</a>
+          <button class="uf-btn-azul" id="btn-contenido" onclick="if(this.dataset.url&&this.dataset.url!="#")window.top.location.href=this.dataset.url">Ver contenido</button>
+          <button class="uf-btn-gris" id="btn-actividades" onclick="if(this.dataset.url&&this.dataset.url!="#")window.top.location.href=this.dataset.url">Ver actividades</button>
           <button class="uf-btn-verde" id="btn-comp-tema">Completado</button>
         </div>
         <button class="uf-btn-siguiente" id="btn-sig-cap1">Siguiente: Capítulo 2 →</button>
@@ -425,7 +425,7 @@ function renderTemas(){
 function abrirTema(tema){
   var pt=document.getElementById('panel-tema');if(pt)pt.style.display='block';
   var tt=document.getElementById('tema-titulo'),td=document.getElementById('tema-desc'),bc=document.getElementById('btn-contenido'),ba=document.getElementById('btn-actividades'),bco=document.getElementById('btn-comp-tema');
-  if(tt)tt.textContent=tema.t;if(td)td.textContent=tema.d;if(bc)bc.href=tema.uc;if(ba)ba.href=tema.ua;
+  if(tt)tt.textContent=tema.t;if(td)td.textContent=tema.d;if(bc){bc.href=tema.uc||'#';bc.dataset.url=tema.uc||'#';}if(ba){ba.href=tema.ua||'#';ba.dataset.url=tema.ua||'#';}
   if(bco){bco.dataset.tid=tema.id;if(isC(tema.id)){bco.textContent='Completado';bco.style.opacity='0.5';bco.style.cursor='default';}else{bco.textContent='Marcar como completado';bco.style.opacity='1';bco.style.cursor='pointer';}}
   var msg=document.getElementById('msg-cap1');if(msg)msg.innerHTML='Preparando <strong>'+tema.t+'</strong>...';
   speak(gAl()+', vamos a ver '+tema.t+'. '+tema.d+' Pulsa Ver contenido para acceder al material.','voz-cap1');
