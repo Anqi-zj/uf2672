@@ -80,7 +80,7 @@ video.switching{opacity:0;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-inicio" autoplay loop muted playsinline src="https://campus.iaeformacion.com/pluginfile.php/83/mod_resource/content/1/Saludo.webm"></video>
+        <video id="vid-inicio" autoplay loop muted playsinline src="./WEBM/Saludo.webm"></video>
         <div class="uf-chip" id="chip-inicio">AGENTE</div>
         <div class="uf-anim-label" id="lbl-inicio"></div>
       </div>
@@ -111,7 +111,7 @@ video.switching{opacity:0;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap1" autoplay loop muted playsinline src="https://campus.iaeformacion.com/pluginfile.php/97/mod_resource/content/2/Hablando1.webm"></video>
+        <video id="vid-cap1" autoplay loop muted playsinline src="./WEBM/Hablando1.webm"></video>
         <div class="uf-chip" id="chip-cap1">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap1"></div>
       </div>
@@ -151,7 +151,7 @@ video.switching{opacity:0;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap2" autoplay loop muted playsinline src="https://campus.iaeformacion.com/pluginfile.php/99/mod_resource/content/1/Hablando2.webm"></video>
+        <video id="vid-cap2" autoplay loop muted playsinline src="./WEBM/Hablando2.webm"></video>
         <div class="uf-chip" id="chip-cap2">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap2"></div>
       </div>
@@ -185,7 +185,7 @@ video.switching{opacity:0;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap3" autoplay loop muted playsinline src="https://campus.iaeformacion.com/pluginfile.php/82/mod_resource/content/1/Se%C3%B1alar.webm"></video>
+        <video id="vid-cap3" autoplay loop muted playsinline src="./WEBM/Señalar.webm"></video>
         <div class="uf-chip" id="chip-cap3">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap3"></div>
       </div>
@@ -219,7 +219,7 @@ video.switching{opacity:0;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap4" autoplay loop muted playsinline src="https://campus.iaeformacion.com/pluginfile.php/97/mod_resource/content/2/Hablando1.webm"></video>
+        <video id="vid-cap4" autoplay loop muted playsinline src="./WEBM/Hablando1.webm"></video>
         <div class="uf-chip" id="chip-cap4">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap4"></div>
       </div>
@@ -259,17 +259,17 @@ var WORKER_URL = 'https://snowy-tooth-2818.anqizhengjin1.workers.dev';
 // Cada animación: {nombre, webm, mp4, duracion_aprox_seg}
 // ═══════════════════════════════════════
 var ANIMS = {
-  saludo:      {n:'Saludo',      w:'https://campus.iaeformacion.com/pluginfile.php/83/mod_resource/content/1/Saludo.webm',      m:'https://campus.iaeformacion.com/pluginfile.php/84/mod_resource/content/1/Saludo.mp4',      d:4},
-  senalar:     {n:'Señalar',     w:'https://campus.iaeformacion.com/pluginfile.php/82/mod_resource/content/1/Se%C3%B1alar.webm',  m:'https://campus.iaeformacion.com/pluginfile.php/104/mod_resource/content/2/Se%C3%B1alar.mp4',  d:5},
-  hablando1:   {n:'Hablando',    w:'https://campus.iaeformacion.com/pluginfile.php/97/mod_resource/content/2/Hablando1.webm',    m:'https://campus.iaeformacion.com/pluginfile.php/108/mod_resource/content/1/Hablando1.mp4',    d:6},
-  hablando2:   {n:'Explicando',  w:'https://campus.iaeformacion.com/pluginfile.php/99/mod_resource/content/1/Hablando2.webm',    m:'https://campus.iaeformacion.com/pluginfile.php/109/mod_resource/content/1/Hablando2.mp4',    d:6},
-  idle:        {n:'En espera',   w:'https://campus.iaeformacion.com/pluginfile.php/98/mod_resource/content/1/Idle.webm',         m:'https://campus.iaeformacion.com/pluginfile.php/107/mod_resource/content/1/Idle.mp4',         d:5},
-  walkie:      {n:'Radio',       w:'https://campus.iaeformacion.com/pluginfile.php/80/mod_resource/content/2/Walkie.webm',       m:'https://campus.iaeformacion.com/pluginfile.php/102/mod_resource/content/2/Walkie.mp4',       d:5},
-  brazos:      {n:'Alerta',      w:'https://campus.iaeformacion.com/pluginfile.php/100/mod_resource/content/1/BrazosEnJarra.webm',m:'https://campus.iaeformacion.com/pluginfile.php/110/mod_resource/content/1/BrazosEnJarra.mp4',d:5},
-  perfecto:    {n:'Perfecto',    w:'https://campus.iaeformacion.com/pluginfile.php/101/mod_resource/content/1/Perfecto.webm',    m:'https://campus.iaeformacion.com/pluginfile.php/111/mod_resource/content/1/Perfecto.mp4',    d:4},
-  stop:        {n:'Stop',        w:'https://campus.iaeformacion.com/pluginfile.php/81/mod_resource/content/3/Stop.webm',         m:'https://campus.iaeformacion.com/pluginfile.php/103/mod_resource/content/1/Stop.mp4',         d:3},
-  pregunta:    {n:'Pregunta',    w:'https://campus.iaeformacion.com/pluginfile.php/95/mod_resource/content/2/Pregunta.webm',     m:'https://campus.iaeformacion.com/pluginfile.php/105/mod_resource/content/2/Pregunta.mp4',     d:4},
-  impaciente:  {n:'Impaciente',  w:'https://campus.iaeformacion.com/pluginfile.php/96/mod_resource/content/2/Impaciente.webm',  m:'https://campus.iaeformacion.com/pluginfile.php/106/mod_resource/content/1/Impaciente.mp4',  d:4}
+  saludo:     {n:'Saludo',     w:'./WEBM/Saludo.webm',       d:4},
+  senalar:    {n:'Señalar',    w:'./WEBM/Señalar.webm',      d:5},
+  hablando1:  {n:'Hablando',   w:'./WEBM/Hablando1.webm',    d:6},
+  hablando2:  {n:'Explicando', w:'./WEBM/Hablando2.webm',    d:6},
+  idle:       {n:'En espera',  w:'./WEBM/Idle.webm',         d:5},
+  walkie:     {n:'Radio',      w:'./WEBM/Walkie.webm',       d:5},
+  brazos:     {n:'Alerta',     w:'./WEBM/BrazosEnJarra.webm',d:5},
+  perfecto:   {n:'Perfecto',   w:'./WEBM/Perfecto.webm',     d:4},
+  stop:       {n:'Stop',       w:'./WEBM/Stop.webm',         d:3},
+  pregunta:   {n:'Pregunta',   w:'./WEBM/Pregunta.webm',     d:4},
+  impaciente: {n:'Impaciente', w:'./WEBM/Impaciente.webm',   d:4}
 };
 
 // Grupos de animaciones por contexto
@@ -295,15 +295,9 @@ function setAnim(vidId, lblId, animKey) {
   var vid = document.getElementById(vidId);
   var lbl = document.getElementById(lblId);
   if (!vid) return;
-
-  // Detectar soporte webm
-  var canWebm = vid.canPlayType('video/webm') !== '';
-  var url = canWebm ? anim.w : anim.m;
-
-  // Fade suave al cambiar
   vid.classList.add('switching');
   setTimeout(function() {
-    vid.src = url;
+    vid.src = anim.w;
     vid.load();
     vid.play().catch(function(){});
     vid.classList.remove('switching');
