@@ -404,10 +404,48 @@ function pararRotacion(vidId) {
 
 function animPuntual(vidId, lblId, animKey, grupo, durSegundos) {
   pararRotacion(vidId);
-  setAnim(vidId, lblId, animKey);
-  setTimeout(function() {
-    iniciarRotacion(vidId, lblId, grupo, null, 18000);
-  }, (durSegundos || ANIMS[animKey].d || 4) * 1000 + 1000);
+  var anim = ANIMS[animKey];
+  if (!anim) return;
+
+  var activa = capaActiva[vidId] || 'a';
+  var siguiente = activa === 'a' ? 'b' : 'a';
+  var vidActual = document.getElementById(vidId + '-' + activa);
+  var vidSig    = document.getElementById(vidId + '-' + siguiente);
+  var lbl       = document.getElementById(lblId);
+
+  if (!vidSig) return;
+
+  vidSig.src = anim.w;
+  vidSig.loop = false; // una sola vez
+  vidSig.muted = true;
+  vidSig.load();
+
+  var listo = false;
+  function mostrar() {
+    if (listo) return; listo = true;
+    vidSig.playbackRate = 0.5;
+    vidSig.play().catch(function(){});
+    vidSig.style.transition = 'opacity 0.8s ease';
+    if (vidActual) { vidActual.style.transition = 'opacity 0.8s ease'; vidActual.style.opacity = '0'; }
+    vidSig.style.opacity = '1';
+    capaActiva[vidId] = siguiente;
+    if (lbl) lbl.textContent = anim.n;
+
+    // Cuando termine, retomar rotación
+    vidSig.onended = function() {
+      vidSig.onended = null;
+      vidSig.loop = true; // restaurar loop para siguiente uso
+      iniciarRotacion(vidId, lblId, grupo, null, 18000);
+    };
+    // Fallback por si onended no dispara
+    var fallback = (durSegundos || anim.d || 4) * 2000 + 1000; // *2 por playbackRate 0.5
+    setTimeout(function() {
+      if (vidSig.onended) { vidSig.onended = null; vidSig.loop = true; iniciarRotacion(vidId, lblId, grupo, null, 18000); }
+    }, fallback);
+  }
+
+  vidSig.oncanplay = function() { vidSig.oncanplay = null; mostrar(); };
+  setTimeout(function() { if (!listo) mostrar(); }, 1500);
 }
 
 // ═══════════════════════════════════════
@@ -576,16 +614,36 @@ function mostrarInicio(){
   var next=caps.find(function(c){return!isC(c.id);});
   var esFin=!next;
 
+  var yaHablado=sessionStorage.getItem('uf_saludo');
   if(esFin){
-    var frase=r(FRASES.saludoFin)(al);
     if(msg)msg.innerHTML='🎖️ <strong style="color:#e8c96a;">'+al+'</strong>, ¡curso completado!';
     iniciarRotacion('vid-inicio','lbl-inicio','idle','perfecto',14000);
-    setTimeout(function(){speak(frase,'voz-inicio');},300);
+    if(!yaHablado){
+      sessionStorage.setItem('uf_saludo','1');
+      setTimeout(function(){speak(r(FRASES.saludoFin)(al),'voz-inicio');},300);
+    }
   }else{
-    var frase=r(FRASES.saludo)(al,ag);
     if(msg)msg.innerHTML='Hola <strong style="color:#e8c96a;">'+al+'</strong>. Soy <strong style="color:#c9a84c;">'+ag+'</strong>.<br>Tu siguiente paso es <strong>Capítulo '+next.id.replace('c','')+' </strong>. Pulsa sobre él para comenzar.';
-    iniciarRotacion('vid-inicio','lbl-inicio','idle','saludo',13000);
-    setTimeout(function(){speak(frase,'voz-inicio');},400);
+    if(!yaHablado){
+      sessionStorage.setItem('uf_saludo','1');
+      // Reproducir Saludo UNA sola vez sin loop, luego pasar a idle
+      var vidA=document.getElementById('vid-inicio-a');
+      if(vidA){
+        vidA.src='./WEBM/Saludo.webm';
+        vidA.loop=false;
+        vidA.playbackRate=0.5;
+        vidA.style.opacity='1';
+        vidA.load();
+        vidA.play().catch(function(){});
+        vidA.onended=function(){
+          vidA.onended=null;
+          iniciarRotacion('vid-inicio','lbl-inicio','idle','idle',18000);
+        };
+      }
+      setTimeout(function(){speak(r(FRASES.saludo)(al,ag),'voz-inicio');},400);
+    } else {
+      iniciarRotacion('vid-inicio','lbl-inicio','idle','idle',13000);
+    }
   }
 }
 
