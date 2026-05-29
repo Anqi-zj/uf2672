@@ -483,6 +483,83 @@ function setChips(){
 }
 
 // ═══════════════════════════════════════
+// BANCO DE FRASES VARIADAS
+// ═══════════════════════════════════════
+function r(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+var FRASES = {
+
+  saludo: [
+    function(al,ag){return 'Hola '+al+'. Soy '+ag+', tu agente de formación. Selecciona un capítulo para empezar.';},
+    function(al,ag){return 'Bienvenido de nuevo, '+al+'. Soy '+ag+'. ¿Listo para continuar con el curso?';},
+    function(al,ag){return al+', aquí '+ag+'. Tienes el curso esperando. ¿Por dónde seguimos?';},
+    function(al,ag){return 'De vuelta al puesto, '+al+'. Soy '+ag+'. Elige el capítulo que toca.';},
+    function(al,ag){return 'Agente '+ag+' en línea. '+al+', selecciona tu próximo objetivo.';},
+    function(al,ag){return 'Hola '+al+'. '+ag+' a tu disposición. El curso sigue adelante, ¿comenzamos?';},
+    function(al,ag){return al+', me alegra verte de nuevo. Soy '+ag+'. Vamos a por ello.';},
+    function(al,ag){return 'Unidad '+ag+' activa. '+al+', ¿cuál es tu siguiente movimiento?';}
+  ],
+
+  saludoFin: [
+    function(al){return '¡Misión cumplida, '+al+'! Has completado el curso UF2672. Excelente trabajo.';},
+    function(al){return al+', lo has conseguido. Curso completado al cien por cien. Eso es profesionalidad.';},
+    function(al){return '¡Enhorabuena, '+al+'! Has superado todos los capítulos. Eres un crack.';},
+    function(al){return 'Objetivo alcanzado, '+al+'. Curso finalizado. Puedes estar orgulloso del trabajo realizado.';},
+    function(al){return al+', has terminado el UF2672. Una formación más en el cinturón. Bien hecho.';}
+  ],
+
+  entrarCap: [
+    function(al,titulo){return al+', entramos en '+titulo+'. Estudia el material y cuando acabes marca el tema como completado.';},
+    function(al,titulo){return 'Bienvenido a '+titulo+', '+al+'. Accede al contenido y trabaja a tu ritmo.';},
+    function(al,titulo){return al+', '+titulo+' te espera. Pulsa Ver contenido para comenzar.';},
+    function(al,titulo){return 'Nuevo capítulo, '+al+'. Estamos en '+titulo+'. Cuando termines, márcalo.';},
+    function(al,titulo){return titulo+'. '+al+', este capítulo es clave. Lee bien el material antes de seguir.';},
+    function(al,titulo){return al+', aquí empieza '+titulo+'. Sin prisa, pero sin pausa. Adelante.';}
+  ],
+
+  entrarTema: [
+    function(al,tema){return al+', vamos con '+tema+'. Accede al contenido y vuelve cuando lo tengas.';},
+    function(al,tema){return 'Abriendo '+tema+'. '+al+', tómate el tiempo que necesites.';},
+    function(al,tema){return al+', '+tema+' es importante. Estudia bien antes de marcar como completado.';},
+    function(al,tema){return 'Siguiente parada, '+al+': '+tema+'. Pulsa Ver contenido para entrar.';},
+    function(al,tema){return tema+'. '+al+', este tema tiene materia que entra en el examen. Ojo.';},
+    function(al,tema){return al+', preparado para '+tema+'? Pulsa Ver contenido y vamos allá.';}
+  ],
+
+  completarTema: [
+    function(al,tema,next){return 'Bien hecho, '+al+'. '+tema+' completado. Siguiente: '+next+'.';},
+    function(al,tema,next){return al+', un tema menos. Ahora toca '+next+'. Sigue así.';},
+    function(al,tema,next){return 'Completado '+tema+'. '+al+', no pares ahora. Continúa con '+next+'.';},
+    function(al,tema,next){return al+', '+tema+' en el saco. El siguiente es '+next+'. Vamos.';},
+    function(al,tema,next){return 'Muy bien, '+al+'. Avanzando. Ahora enfócate en '+next+'.';}
+  ],
+
+  completarTodos: [
+    function(al){return '¡Excelente, '+al+'! Has terminado todos los temas del Capítulo 1. Pulsa Siguiente para continuar.';},
+    function(al){return al+', capítulo uno finiquitado. Pulsa Siguiente y seguimos adelante.';},
+    function(al){return 'Todos los temas del Capítulo 1 completados, '+al+'. ¡A por el siguiente!';},
+    function(al){return al+', lo has clavado. Capítulo 1 terminado. Pulsa Siguiente cuando estés listo.';}
+  ],
+
+  completarCap: [
+    function(al,titulo){return 'Enhorabuena, '+al+'. Has completado '+titulo+'. Pulsa Siguiente para continuar.';},
+    function(al,titulo){return al+', '+titulo+' superado. Eso es dedicación. Siguiente capítulo.';},
+    function(al,titulo){return '¡Bien hecho, '+al+'! '+titulo+' en el registro. Seguimos.';},
+    function(al,titulo){return al+', un capítulo más tachado. '+titulo+' completado. Pulsa Siguiente.';},
+    function(al,titulo){return 'Objetivo cumplido, '+al+'. '+titulo+' finalizado. No te detengas.';}
+  ],
+
+  bloqueado: [
+    function(al){return al+', ese capítulo está bloqueado. Completa el anterior primero.';},
+    function(al){return 'Acceso denegado, '+al+'. Tienes que terminar el capítulo anterior.';},
+    function(al){return al+', paso a paso. Primero completa lo que tienes pendiente.';},
+    function(al){return 'No tan rápido, '+al+'. Hay que ir por orden. Termina el anterior.';},
+    function(al){return al+', el orden importa en formación. Completa primero el capítulo anterior.';}
+  ]
+
+};
+
+// ═══════════════════════════════════════
 // PANTALLA INICIO
 // ═══════════════════════════════════════
 function mostrarInicio(){
@@ -500,15 +577,15 @@ function mostrarInicio(){
   var esFin=!next;
 
   if(esFin){
-    if(msg)msg.innerHTML='¡Enhorabuena <strong style="color:#e8c96a;">'+al+'</strong>! Has completado todo el curso.';
-    // Animación: perfecto → luego idle rotando
+    var frase=r(FRASES.saludoFin)(al);
+    if(msg)msg.innerHTML='🎖️ <strong style="color:#e8c96a;">'+al+'</strong>, ¡curso completado!';
     iniciarRotacion('vid-inicio','lbl-inicio','idle','perfecto',14000);
-    setTimeout(function(){speak('Enhorabuena '+al+'. Has completado todo el curso UF2672.','voz-inicio');},300);
+    setTimeout(function(){speak(frase,'voz-inicio');},300);
   }else{
+    var frase=r(FRASES.saludo)(al,ag);
     if(msg)msg.innerHTML='Hola <strong style="color:#e8c96a;">'+al+'</strong>. Soy <strong style="color:#c9a84c;">'+ag+'</strong>.<br>Tu siguiente paso es <strong>Capítulo '+next.id.replace('c','')+' </strong>. Pulsa sobre él para comenzar.';
-    // Animación: saludo → luego rota entre idle/walkie/brazos
     iniciarRotacion('vid-inicio','lbl-inicio','idle','saludo',13000);
-    setTimeout(function(){speak('Hola '+al+'. Soy '+ag+'. Pulsa sobre tu siguiente capítulo para comenzar.','voz-inicio');},400);
+    setTimeout(function(){speak(frase,'voz-inicio');},400);
   }
 }
 
@@ -530,9 +607,9 @@ function renderCaps(){
     d.style.color=co?'#4caf7d':bl?'rgba(138,154,181,0.4)':'#d0daea';
     d.innerHTML='<span>'+cap.t+'</span><span>'+(co?'✓':bl?'🔒':'▶')+'</span>';
     if(bl){
-      // Al intentar clic en bloqueado → animación stop/impaciente
       d.addEventListener('click',function(){
         animPuntual('vid-inicio','lbl-inicio','stop','idle',3);
+        setTimeout(function(){speak(r(FRASES.bloqueado)(gAl()),'voz-inicio');},300);
       });
     }else{
       (function(p){d.addEventListener('click',function(){
@@ -573,9 +650,8 @@ function iniciarCap1(){
     animPuntual('vid-cap1','lbl-cap1','perfecto','hablando',4);
   }else{
     if(msg)msg.innerHTML='Hola <strong style="color:#e8c96a;">'+al+'</strong>. Tu siguiente tema es <strong>'+(next?next.t:'')+'</strong>.';
-    // Rota entre hablando1, hablando2, señalar
     iniciarRotacion('vid-cap1','lbl-cap1','hablando','hablando1',11000);
-    setTimeout(function(){speak('Hola '+al+'. Bienvenido al Capítulo 1. Pulsa sobre tu siguiente tema para comenzar.','voz-cap1');},400);
+    setTimeout(function(){speak(r(FRASES.entrarCap)(al,'Capítulo 1 — Derecho Político y Administrativo'),'voz-cap1');},400);
   }
 }
 
@@ -593,6 +669,7 @@ function renderTemas(){
     if(bl){
       d.addEventListener('click',function(){
         animPuntual('vid-cap1','lbl-cap1','impaciente','hablando',4);
+        setTimeout(function(){speak(r(FRASES.bloqueado)(gAl()),'voz-cap1');},300);
       });
     }else{
       (function(t){d.addEventListener('click',function(){abrirTema(t);});})(tema);
@@ -610,9 +687,8 @@ function abrirTema(tema){
   if(bco){bco.dataset.tid=tema.id;if(isC(tema.id)){bco.textContent='Completado';bco.style.opacity='0.5';bco.style.cursor='default';}else{bco.textContent='Marcar como completado';bco.style.opacity='1';bco.style.cursor='pointer';}}
   var msg=document.getElementById('msg-cap1');
   if(msg)msg.innerHTML='Preparando <strong>'+tema.t+'</strong>...';
-  // Al abrir tema → señalar
   animPuntual('vid-cap1','lbl-cap1','senalar','hablando',5);
-  setTimeout(function(){speak(gAl()+', vamos a ver '+tema.t+'. Pulsa Ver contenido para acceder al material.','voz-cap1');},400);
+  setTimeout(function(){speak(r(FRASES.entrarTema)(gAl(),tema.t),'voz-cap1');},400);
   if(pt)pt.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
@@ -628,15 +704,13 @@ function completarTema(id){
     mC('c1');
     var sig=document.getElementById('btn-sig-cap1');if(sig)sig.style.display='block';
     var msg=document.getElementById('msg-cap1');if(msg)msg.innerHTML='¡Has completado el Capítulo 1! Pulsa Siguiente para continuar.';
-    // Perfecto → luego hablando
     animPuntual('vid-cap1','lbl-cap1','perfecto','hablando',4);
-    setTimeout(function(){speak('Enhorabuena '+al+'. Has completado todos los temas del Capítulo 1. Pulsa Siguiente para continuar.','voz-cap1');},300);
+    setTimeout(function(){speak(r(FRASES.completarTodos)(al),'voz-cap1');},300);
   }else{
     var next=TEMAS.find(function(t){return!isC(t.id);});
     var msg=document.getElementById('msg-cap1');if(msg)msg.innerHTML='Completado. Tu siguiente tema es <strong>'+(next?next.t:'')+'</strong>.';
-    // Walkie → sigue hablando
     animPuntual('vid-cap1','lbl-cap1','walkie','hablando',5);
-    setTimeout(function(){speak('Muy bien '+al+'. Has completado '+(tema?tema.t:'')+'. Continúa con '+(next?next.t:'')+'.','voz-cap1');},300);
+    setTimeout(function(){speak(r(FRASES.completarTema)(al,tema?tema.t:'',next?next.t:''),'voz-cap1');},300);
   }
 }
 
@@ -661,13 +735,11 @@ function iniciarCapX(num,titulo,desc,idCap,sigId){
     animPuntual(vidId,lblId,'perfecto','hablando',4);
   }else{
     if(msg)msg.innerHTML='Hola <strong style="color:#e8c96a;">'+al+'</strong>. Soy <strong style="color:#c9a84c;">'+ag+'</strong>.<br>Estudia el contenido y cuando termines marca como completado.';
-    // Cada capítulo arranca con una anim diferente
     var primerAnim=['hablando2','senalar','hablando1'][num-2] || 'hablando1';
     iniciarRotacion(vidId,lblId,'hablando',primerAnim,11000);
-    setTimeout(function(){speak('Hola '+al+'. Bienvenido a '+titulo+'. Pulsa Ver contenido para comenzar.',vozId);},400);
+    setTimeout(function(){speak(r(FRASES.entrarCap)(al,titulo),vozId);},400);
   }
 
-  // Listener completado (se añade solo una vez)
   if(bco && !bco.dataset.bound){
     bco.dataset.bound='1';
     bco.addEventListener('click',function(){
@@ -676,7 +748,7 @@ function iniciarCapX(num,titulo,desc,idCap,sigId){
       if(sigBtn)sigBtn.style.display='block';
       if(msg)msg.innerHTML='¡Excelente <strong style="color:#e8c96a;">'+al+'</strong>! Has completado este capítulo.';
       animPuntual(vidId,lblId,'perfecto','hablando',4);
-      setTimeout(function(){speak('Enhorabuena '+al+'. Has completado '+titulo+'. Pulsa Siguiente para continuar.',vozId);},300);
+      setTimeout(function(){speak(r(FRASES.completarCap)(al,titulo),vozId);},300);
     });
   }
   if(sigBtn && !sigBtn.dataset.bound){
