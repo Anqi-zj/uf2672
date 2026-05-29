@@ -634,13 +634,16 @@ function mostrarInicio(){
         vidA.playbackRate=0.5;
         vidA.style.opacity='1';
         vidA.load();
-        vidA.play().catch(function(){});
-        vidA.onended=function(){
-          vidA.onended=null;
-          iniciarRotacion('vid-inicio','lbl-inicio','idle','idle',18000);
+        vidA.oncanplay=function(){
+          vidA.oncanplay=null;
+          vidA.play().catch(function(){});
+          speak(r(FRASES.saludo)(al,ag),'voz-inicio');
+          vidA.onended=function(){
+            vidA.onended=null;
+            iniciarRotacion('vid-inicio','lbl-inicio','idle','idle',18000);
+          };
         };
       }
-      setTimeout(function(){speak(r(FRASES.saludo)(al,ag),'voz-inicio');},400);
     } else {
       iniciarRotacion('vid-inicio','lbl-inicio','idle','idle',13000);
     }
