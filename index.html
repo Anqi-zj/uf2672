@@ -831,6 +831,12 @@ window.addEventListener('DOMContentLoaded',function(){
     if(!a){if(ale)ale.style.borderColor='#cc4444';return;}
     if(!b){if(age)age.style.borderColor='#cc4444';return;}
     localStorage.setItem('uf_al',a);localStorage.setItem('uf_ag',b);
+    // Desbloquear speechSynthesis desde el evento de clic del usuario
+    if(window.speechSynthesis){
+      var u=new SpeechSynthesisUtterance('');
+      window.speechSynthesis.speak(u);
+      window.speechSynthesis.cancel();
+    }
     setChips();mostrarInicio();
   });
   var btnCambiar=document.getElementById('btn-cambiar');
