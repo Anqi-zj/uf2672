@@ -80,10 +80,7 @@ video.switching{opacity:0;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-inicio" autoplay loop muted playsinline>
-          <source id="vid-inicio-webm" src="" type="video/webm">
-          <source id="vid-inicio-mp4" src="" type="video/mp4">
-        </video>
+        <video id="vid-inicio" autoplay loop muted playsinline src="https://campus.iaeformacion.com/pluginfile.php/83/mod_resource/content/1/Saludo.webm"></video>
         <div class="uf-chip" id="chip-inicio">AGENTE</div>
         <div class="uf-anim-label" id="lbl-inicio"></div>
       </div>
@@ -114,10 +111,7 @@ video.switching{opacity:0;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap1" autoplay loop muted playsinline>
-          <source id="vid-cap1-webm" src="" type="video/webm">
-          <source id="vid-cap1-mp4" src="" type="video/mp4">
-        </video>
+        <video id="vid-cap1" autoplay loop muted playsinline src="https://campus.iaeformacion.com/pluginfile.php/97/mod_resource/content/2/Hablando1.webm"></video>
         <div class="uf-chip" id="chip-cap1">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap1"></div>
       </div>
@@ -157,10 +151,7 @@ video.switching{opacity:0;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap2" autoplay loop muted playsinline>
-          <source id="vid-cap2-webm" src="" type="video/webm">
-          <source id="vid-cap2-mp4" src="" type="video/mp4">
-        </video>
+        <video id="vid-cap2" autoplay loop muted playsinline src="https://campus.iaeformacion.com/pluginfile.php/99/mod_resource/content/1/Hablando2.webm"></video>
         <div class="uf-chip" id="chip-cap2">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap2"></div>
       </div>
@@ -194,10 +185,7 @@ video.switching{opacity:0;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap3" autoplay loop muted playsinline>
-          <source id="vid-cap3-webm" src="" type="video/webm">
-          <source id="vid-cap3-mp4" src="" type="video/mp4">
-        </video>
+        <video id="vid-cap3" autoplay loop muted playsinline src="https://campus.iaeformacion.com/pluginfile.php/82/mod_resource/content/1/Se%C3%B1alar.webm"></video>
         <div class="uf-chip" id="chip-cap3">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap3"></div>
       </div>
@@ -231,10 +219,7 @@ video.switching{opacity:0;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap4" autoplay loop muted playsinline>
-          <source id="vid-cap4-webm" src="" type="video/webm">
-          <source id="vid-cap4-mp4" src="" type="video/mp4">
-        </video>
+        <video id="vid-cap4" autoplay loop muted playsinline src="https://campus.iaeformacion.com/pluginfile.php/97/mod_resource/content/2/Hablando1.webm"></video>
         <div class="uf-chip" id="chip-cap4">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap4"></div>
       </div>
@@ -311,13 +296,14 @@ function setAnim(vidId, lblId, animKey) {
   var lbl = document.getElementById(lblId);
   if (!vid) return;
 
+  // Detectar soporte webm
+  var canWebm = vid.canPlayType('video/webm') !== '';
+  var url = canWebm ? anim.w : anim.m;
+
   // Fade suave al cambiar
   vid.classList.add('switching');
   setTimeout(function() {
-    var ws = document.getElementById(vidId + '-webm');
-    var ms = document.getElementById(vidId + '-mp4');
-    if (ws) ws.src = anim.w;
-    if (ms) ms.src = anim.m;
+    vid.src = url;
     vid.load();
     vid.play().catch(function(){});
     vid.classList.remove('switching');
