@@ -16,6 +16,7 @@ body{font-family:'Open Sans',sans-serif;background:#0d1f3c;color:#d0daea;padding
 .uf-col-content{flex:1 1 200px;display:flex;flex-direction:column;gap:10px;min-width:180px;}
 .uf-video-wrap{position:relative;width:100%;border-radius:12px;overflow:hidden;border:1px solid rgba(58,114,196,0.35);background:#111e35;aspect-ratio:3/4;}
 video{width:100%;display:block;object-fit:cover;object-position:top center;}
+.uf-anim-label{display:none;}
 .uf-chip{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(10,20,40,0.9);border:1px solid #c9a84c;border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:2px;color:#c9a84c;white-space:nowrap;}
 .uf-anim-label{position:absolute;top:6px;right:6px;background:rgba(10,20,40,0.75);border-radius:4px;padding:2px 6px;font-size:9px;color:rgba(201,168,76,0.6);letter-spacing:1px;text-transform:uppercase;}
 .uf-voz{display:none;align-items:center;gap:5px;padding:4px 10px;background:rgba(26,58,107,0.4);border:1px solid rgba(58,114,196,0.25);border-radius:20px;}
@@ -56,13 +57,6 @@ video{width:100%;display:block;object-fit:cover;object-position:top center;}
 </style>
 </head>
 <body>
-
-<!-- OVERLAY PLAY para desbloquear autoplay en iframe -->
-<div id="uf-play-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,20,40,0.92);z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
-  <div style="font-size:11px;font-weight:700;letter-spacing:3px;color:#c9a84c;text-transform:uppercase;">UF2672 · Agente</div>
-  <div style="font-size:16px;color:#d0daea;text-align:center;">Pulsa para iniciar</div>
-  <button id="uf-play-btn" style="width:64px;height:64px;border-radius:50%;background:#1a3a6b;border:2px solid #c9a84c;color:#c9a84c;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;">▶</button>
-</div>
 
 <!-- PANTALLA 1: NOMBRE -->
 <div id="p-nombre" class="uf-screen activo" style="flex-direction:column;align-items:center;">
@@ -830,22 +824,6 @@ function iniciarCap4(){iniciarCapX(4,'Capítulo 4 — Pautas de Actuación en la
 // INICIALIZACIÓN
 // ═══════════════════════════════════════
 window.addEventListener('DOMContentLoaded',function(){
-
-  // Detectar si estamos dentro de un iframe (Moodle)
-  // y mostrar overlay de play para desbloquear autoplay
-  var enIframe = window.self !== window.top;
-  var overlay = document.getElementById('uf-play-overlay');
-  var playBtn = document.getElementById('uf-play-btn');
-  if(enIframe && overlay){
-    overlay.style.display='flex';
-    playBtn.addEventListener('click',function(){
-      overlay.style.display='none';
-      // Intentar reproducir todos los vídeos para desbloquear
-      document.querySelectorAll('video').forEach(function(v){
-        v.play().catch(function(){});
-      });
-    });
-  }
   var btnCom=document.getElementById('btn-comenzar');
   if(btnCom)btnCom.addEventListener('click',function(){
     var ale=document.getElementById('inp-al'),age=document.getElementById('inp-ag');
