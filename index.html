@@ -620,7 +620,6 @@ function mostrarInicio(){
     if(msg)msg.innerHTML='Hola <strong style="color:#e8c96a;">'+al+'</strong>. Soy <strong style="color:#c9a84c;">'+ag+'</strong>.<br>Tu siguiente paso es <strong>Capítulo '+next.id.replace('c','')+' </strong>. Pulsa sobre él para comenzar.';
     if(!yaHablado){
       sessionStorage.setItem('uf_saludo','1');
-      // Reproducir Saludo UNA sola vez sin loop, luego pasar a idle
       var vidA=document.getElementById('vid-inicio-a');
       if(vidA){
         vidA.src='./WEBM/Saludo.webm';
@@ -631,7 +630,6 @@ function mostrarInicio(){
         vidA.oncanplay=function(){
           vidA.oncanplay=null;
           vidA.play().catch(function(){});
-          setTimeout(function(){speak(r(FRASES.saludo)(al,ag),'voz-inicio');},50);
           vidA.onended=function(){
             vidA.onended=null;
             iniciarRotacion('vid-inicio','lbl-inicio','idle','idle',18000);
@@ -831,13 +829,13 @@ window.addEventListener('DOMContentLoaded',function(){
     if(!a){if(ale)ale.style.borderColor='#cc4444';return;}
     if(!b){if(age)age.style.borderColor='#cc4444';return;}
     localStorage.setItem('uf_al',a);localStorage.setItem('uf_ag',b);
-    // Desbloquear speechSynthesis desde el evento de clic del usuario
-    if(window.speechSynthesis){
-      var u=new SpeechSynthesisUtterance('');
-      window.speechSynthesis.speak(u);
-      window.speechSynthesis.cancel();
+    setChips();
+    // Disparar el saludo directamente desde el clic (garantiza permiso del navegador)
+    if(!sessionStorage.getItem('uf_saludo')){
+      sessionStorage.setItem('uf_saludo','1');
+      speak(r(FRASES.saludo)(a,b),'voz-inicio');
     }
-    setChips();mostrarInicio();
+    mostrarInicio();
   });
   var btnCambiar=document.getElementById('btn-cambiar');
   if(btnCambiar)btnCambiar.addEventListener('click',function(){
