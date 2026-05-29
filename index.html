@@ -6,7 +6,7 @@
 <title>UF2672 — Agente</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Open Sans',sans-serif;background:#0d1f3c;color:#d0daea;padding:16px;}
+body{font-family:'Open Sans',sans-serif;background:#0d1f3c;color:#d0daea;padding:16px;min-height:unset;height:auto;}
 @keyframes ufO{0%,100%{transform:scaleY(.4);opacity:.5}50%{transform:scaleY(1);opacity:1}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .uf-screen{display:none;}
@@ -14,7 +14,7 @@ body{font-family:'Open Sans',sans-serif;background:#0d1f3c;color:#d0daea;padding
 .uf-row{display:flex;flex-wrap:wrap;gap:16px;width:100%;}
 .uf-col-video{flex:0 0 auto;width:clamp(130px,25%,180px);display:flex;flex-direction:column;align-items:center;gap:10px;}
 .uf-col-content{flex:1 1 200px;display:flex;flex-direction:column;gap:10px;min-width:180px;}
-.uf-video-wrap{position:relative;width:100%;border-radius:12px;overflow:hidden;border:1px solid rgba(58,114,196,0.35);background:#111e35;}
+.uf-video-wrap{position:relative;width:100%;border-radius:12px;overflow:hidden;border:1px solid rgba(58,114,196,0.35);background:#111e35;aspect-ratio:3/4;}
 video{width:100%;display:block;object-fit:cover;object-position:top center;}
 .uf-chip{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(10,20,40,0.9);border:1px solid #c9a84c;border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:2px;color:#c9a84c;white-space:nowrap;}
 .uf-anim-label{position:absolute;top:6px;right:6px;background:rgba(10,20,40,0.75);border-radius:4px;padding:2px 6px;font-size:9px;color:rgba(201,168,76,0.6);letter-spacing:1px;text-transform:uppercase;}
@@ -57,6 +57,13 @@ video{width:100%;display:block;object-fit:cover;object-position:top center;}
 </head>
 <body>
 
+<!-- OVERLAY PLAY para desbloquear autoplay en iframe -->
+<div id="uf-play-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,20,40,0.92);z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <div style="font-size:11px;font-weight:700;letter-spacing:3px;color:#c9a84c;text-transform:uppercase;">UF2672 · Agente</div>
+  <div style="font-size:16px;color:#d0daea;text-align:center;">Pulsa para iniciar</div>
+  <button id="uf-play-btn" style="width:64px;height:64px;border-radius:50%;background:#1a3a6b;border:2px solid #c9a84c;color:#c9a84c;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;">▶</button>
+</div>
+
 <!-- PANTALLA 1: NOMBRE -->
 <div id="p-nombre" class="uf-screen activo" style="flex-direction:column;align-items:center;">
   <div class="uf-nombre-wrap">
@@ -79,7 +86,7 @@ video{width:100%;display:block;object-fit:cover;object-position:top center;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-inicio" autoplay loop muted playsinline src="./WEBM/Saludo.webm"></video>
+        <video id="vid-inicio-a" autoplay loop muted playsinline src="./WEBM/Saludo.webm" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;transition:opacity 1s ease;opacity:1;"></video><video id="vid-inicio-b" autoplay loop muted playsinline src="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;transition:opacity 1s ease;opacity:0;"></video><div style="position:relative;padding-top:133%;"></div>
         <div class="uf-chip" id="chip-inicio">AGENTE</div>
         <div class="uf-anim-label" id="lbl-inicio"></div>
       </div>
@@ -110,7 +117,7 @@ video{width:100%;display:block;object-fit:cover;object-position:top center;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap1" autoplay loop muted playsinline src="./WEBM/Hablando1.webm"></video>
+        <video id="vid-cap1-a" autoplay loop muted playsinline src="./WEBM/Hablando1.webm" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;transition:opacity 1s ease;opacity:1;"></video><video id="vid-cap1-b" autoplay loop muted playsinline src="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;transition:opacity 1s ease;opacity:0;"></video><div style="position:relative;padding-top:133%;"></div>
         <div class="uf-chip" id="chip-cap1">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap1"></div>
       </div>
@@ -150,7 +157,7 @@ video{width:100%;display:block;object-fit:cover;object-position:top center;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap2" autoplay loop muted playsinline src="./WEBM/Hablando2.webm"></video>
+        <video id="vid-cap2-a" autoplay loop muted playsinline src="./WEBM/Hablando2.webm" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;transition:opacity 1s ease;opacity:1;"></video><video id="vid-cap2-b" autoplay loop muted playsinline src="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;transition:opacity 1s ease;opacity:0;"></video><div style="position:relative;padding-top:133%;"></div>
         <div class="uf-chip" id="chip-cap2">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap2"></div>
       </div>
@@ -184,7 +191,7 @@ video{width:100%;display:block;object-fit:cover;object-position:top center;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap3" autoplay loop muted playsinline src="./WEBM/Señalar.webm"></video>
+        <video id="vid-cap3-a" autoplay loop muted playsinline src="./WEBM/Señalar.webm" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;transition:opacity 1s ease;opacity:1;"></video><video id="vid-cap3-b" autoplay loop muted playsinline src="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;transition:opacity 1s ease;opacity:0;"></video><div style="position:relative;padding-top:133%;"></div>
         <div class="uf-chip" id="chip-cap3">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap3"></div>
       </div>
@@ -218,7 +225,7 @@ video{width:100%;display:block;object-fit:cover;object-position:top center;}
   <div class="uf-row">
     <div class="uf-col-video">
       <div class="uf-video-wrap">
-        <video id="vid-cap4" autoplay loop muted playsinline src="./WEBM/Hablando1.webm"></video>
+        <video id="vid-cap4-a" autoplay loop muted playsinline src="./WEBM/Hablando1.webm" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;transition:opacity 1s ease;opacity:1;"></video><video id="vid-cap4-b" autoplay loop muted playsinline src="" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;transition:opacity 1s ease;opacity:0;"></video><div style="position:relative;padding-top:133%;"></div>
         <div class="uf-chip" id="chip-cap4">AGENTE</div>
         <div class="uf-anim-label" id="lbl-cap4"></div>
       </div>
@@ -286,102 +293,121 @@ var rotTimers = {};
 var rotIndex  = {};
 
 // ═══════════════════════════════════════
-// MOTOR DE ANIMACIONES
+// MOTOR DE ANIMACIONES — crossfade dual
 // ═══════════════════════════════════════
 
-// Cache de precarga
-var preloadCache = {};
-
-// Precarga un vídeo en segundo plano
-function precargar(animKey) {
-  if (preloadCache[animKey]) return; // ya precargado
-  var anim = ANIMS[animKey];
-  if (!anim) return;
-  var v = document.createElement('video');
-  v.src = anim.w;
-  v.preload = 'auto';
-  v.muted = true;
-  v.load();
-  preloadCache[animKey] = v;
-}
-
-// Precarga todos los vídeos de un grupo
-function precargarGrupo(grupo) {
-  var lista = GRUPOS[grupo] || [];
-  lista.forEach(function(key) { precargar(key); });
-}
+// Estado por vídeo: qué capa está activa (a o b)
+var capaActiva = {}; // vidId -> 'a' o 'b'
 
 function setAnim(vidId, lblId, animKey, sinFade) {
   var anim = ANIMS[animKey];
   if (!anim) return;
-  var vid = document.getElementById(vidId);
   var lbl = document.getElementById(lblId);
-  if (!vid) return;
 
-  var FADE = sinFade ? 0 : 600; // ms fade out
+  var activa = capaActiva[vidId] || 'a';
+  var siguiente = activa === 'a' ? 'b' : 'a';
 
-  // Fade out lento
-  vid.style.transition = 'opacity ' + (FADE/1000) + 's ease';
-  vid.style.opacity = '0';
+  var vidActual = document.getElementById(vidId + '-' + activa);
+  var vidSig    = document.getElementById(vidId + '-' + siguiente);
 
-  setTimeout(function() {
-    vid.src = anim.w;
-    vid.load();
-    vid.play().catch(function(){});
+  if (!vidActual || !vidSig) return;
+
+  var FADE = sinFade ? 0 : 900; // ms crossfade
+
+  // Cargar el nuevo vídeo en la capa oculta
+  vidSig.src = anim.w;
+  vidSig.load();
+  vidSig.muted = true;
+  vidSig.loop = true;
+
+  function hacerCrossfade() {
+    vidSig.playbackRate = 0.5;
+    vidSig.play().catch(function(){});
+    // Crossfade: fade in de la nueva, fade out de la vieja
+    vidSig.style.transition = 'opacity ' + (FADE/1000) + 's ease';
+    vidActual.style.transition = 'opacity ' + (FADE/1000) + 's ease';
+    vidSig.style.opacity = '1';
+    vidActual.style.opacity = '0';
+    capaActiva[vidId] = siguiente;
     if (lbl) lbl.textContent = anim.n;
-    // Fade in lento una vez cargado
-    vid.oncanplay = function() {
-      vid.style.opacity = '1';
-      vid.oncanplay = null;
+    // Pausar la capa vieja después del fade
+    setTimeout(function() {
+      if (vidActual.style.opacity === '0') {
+        vidActual.pause();
+        vidActual.src = '';
+      }
+    }, FADE + 200);
+  }
+
+  if (sinFade) {
+    vidSig.style.opacity = '1';
+    vidActual.style.opacity = '0';
+    vidSig.playbackRate = 0.5;
+    vidSig.play().catch(function(){});
+    capaActiva[vidId] = siguiente;
+    if (lbl) lbl.textContent = anim.n;
+  } else {
+    // Esperar a que el vídeo esté listo antes de hacer crossfade
+    var listo = false;
+    vidSig.oncanplay = function() {
+      if (listo) return; listo = true;
+      vidSig.oncanplay = null;
+      vidSig.playbackRate = 0.5;
+      hacerCrossfade();
     };
-    // Fallback por si oncanplay no dispara
-    setTimeout(function() { vid.style.opacity = '1'; }, 800);
-  }, FADE);
+    // Fallback: si tarda más de 1.5s hacemos crossfade igual
+    setTimeout(function() {
+      if (!listo) { listo = true; hacerCrossfade(); }
+    }, 1500);
+  }
 }
 
 function iniciarRotacion(vidId, lblId, grupo, primerAnim, intervaloBase) {
   if (rotTimers[vidId]) clearTimeout(rotTimers[vidId]);
   rotIndex[vidId] = 0;
+  capaActiva[vidId] = 'a';
 
   var lista = GRUPOS[grupo] || GRUPOS.idle;
 
-  // Precargar todo el grupo en segundo plano
-  precargarGrupo(grupo);
+  // Primera animación directa en capa A sin fade
+  var primera = primerAnim || lista[0];
+  var vidA = document.getElementById(vidId + '-a');
+  if (vidA) {
+    vidA.src = ANIMS[primera] ? ANIMS[primera].w : '';
+    vidA.style.opacity = '1';
+    vidA.load();
+    vidA.playbackRate = 0.5;
+    vidA.play().catch(function(){});
+    if (document.getElementById(lblId))
+      document.getElementById(lblId).textContent = ANIMS[primera] ? ANIMS[primera].n : '';
+  }
+  var vidB = document.getElementById(vidId + '-b');
+  if (vidB) { vidB.style.opacity = '0'; vidB.src = ''; }
 
-  // Primera animación sin fade (ya está en pantalla o es la inicial)
-  setAnim(vidId, lblId, primerAnim || lista[0], true);
-
-  var base = intervaloBase || 15000; // más lento: 15s base
+  var base = intervaloBase || 18000; // 18s base — más lento
 
   function siguiente() {
     rotIndex[vidId] = (rotIndex[vidId] + 1) % lista.length;
     var key = lista[rotIndex[vidId]];
-
-    // Precargar el siguiente de la cola antes de mostrarlo
-    var nextIdx = (rotIndex[vidId] + 1) % lista.length;
-    precargar(lista[nextIdx]);
-
     setAnim(vidId, lblId, key);
-    var siguiente_ms = base + Math.floor(Math.random() * 6000);
-    rotTimers[vidId] = setTimeout(siguiente, siguiente_ms);
+    var sig_ms = base + Math.floor(Math.random() * 7000); // variación ±7s
+    rotTimers[vidId] = setTimeout(siguiente, sig_ms);
   }
 
-  var primer_intervalo = base + Math.floor(Math.random() * 5000);
-  rotTimers[vidId] = setTimeout(siguiente, primer_intervalo);
+  var primer_ms = base + Math.floor(Math.random() * 6000);
+  rotTimers[vidId] = setTimeout(siguiente, primer_ms);
 }
 
 function pararRotacion(vidId) {
   if (rotTimers[vidId]) { clearTimeout(rotTimers[vidId]); rotTimers[vidId] = null; }
 }
 
-// Animación puntual: reproduce una anim específica y luego retoma la rotación
 function animPuntual(vidId, lblId, animKey, grupo, durSegundos) {
   pararRotacion(vidId);
-  precargar(animKey);
   setAnim(vidId, lblId, animKey);
   setTimeout(function() {
-    iniciarRotacion(vidId, lblId, grupo, null, 15000);
-  }, (durSegundos || ANIMS[animKey].d || 4) * 1000 + 800);
+    iniciarRotacion(vidId, lblId, grupo, null, 18000);
+  }, (durSegundos || ANIMS[animKey].d || 4) * 1000 + 1000);
 }
 
 // ═══════════════════════════════════════
@@ -671,6 +697,22 @@ function iniciarCap4(){iniciarCapX(4,'Capítulo 4 — Pautas de Actuación en la
 // INICIALIZACIÓN
 // ═══════════════════════════════════════
 window.addEventListener('DOMContentLoaded',function(){
+
+  // Detectar si estamos dentro de un iframe (Moodle)
+  // y mostrar overlay de play para desbloquear autoplay
+  var enIframe = window.self !== window.top;
+  var overlay = document.getElementById('uf-play-overlay');
+  var playBtn = document.getElementById('uf-play-btn');
+  if(enIframe && overlay){
+    overlay.style.display='flex';
+    playBtn.addEventListener('click',function(){
+      overlay.style.display='none';
+      // Intentar reproducir todos los vídeos para desbloquear
+      document.querySelectorAll('video').forEach(function(v){
+        v.play().catch(function(){});
+      });
+    });
+  }
   var btnCom=document.getElementById('btn-comenzar');
   if(btnCom)btnCom.addEventListener('click',function(){
     var ale=document.getElementById('inp-al'),age=document.getElementById('inp-ag');
