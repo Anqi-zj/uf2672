@@ -15,8 +15,7 @@ body{font-family:'Open Sans',sans-serif;background:#0d1f3c;color:#d0daea;padding
 .uf-col-video{flex:0 0 auto;width:clamp(130px,25%,180px);display:flex;flex-direction:column;align-items:center;gap:10px;}
 .uf-col-content{flex:1 1 200px;display:flex;flex-direction:column;gap:10px;min-width:180px;}
 .uf-video-wrap{position:relative;width:100%;border-radius:12px;overflow:hidden;border:1px solid rgba(58,114,196,0.35);background:#111e35;}
-video{width:100%;display:block;object-fit:cover;object-position:top center;transition:opacity .3s;}
-video.switching{opacity:0;}
+video{width:100%;display:block;object-fit:cover;object-position:top center;}
 .uf-chip{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(10,20,40,0.9);border:1px solid #c9a84c;border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;letter-spacing:2px;color:#c9a84c;white-space:nowrap;}
 .uf-anim-label{position:absolute;top:6px;right:6px;background:rgba(10,20,40,0.75);border-radius:4px;padding:2px 6px;font-size:9px;color:rgba(201,168,76,0.6);letter-spacing:1px;text-transform:uppercase;}
 .uf-voz{display:none;align-items:center;gap:5px;padding:4px 10px;background:rgba(26,58,107,0.4);border:1px solid rgba(58,114,196,0.25);border-radius:20px;}
@@ -289,46 +288,85 @@ var rotIndex  = {};
 // ═══════════════════════════════════════
 // MOTOR DE ANIMACIONES
 // ═══════════════════════════════════════
-function setAnim(vidId, lblId, animKey) {
+
+// Cache de precarga
+var preloadCache = {};
+
+// Precarga un vídeo en segundo plano
+function precargar(animKey) {
+  if (preloadCache[animKey]) return; // ya precargado
+  var anim = ANIMS[animKey];
+  if (!anim) return;
+  var v = document.createElement('video');
+  v.src = anim.w;
+  v.preload = 'auto';
+  v.muted = true;
+  v.load();
+  preloadCache[animKey] = v;
+}
+
+// Precarga todos los vídeos de un grupo
+function precargarGrupo(grupo) {
+  var lista = GRUPOS[grupo] || [];
+  lista.forEach(function(key) { precargar(key); });
+}
+
+function setAnim(vidId, lblId, animKey, sinFade) {
   var anim = ANIMS[animKey];
   if (!anim) return;
   var vid = document.getElementById(vidId);
   var lbl = document.getElementById(lblId);
   if (!vid) return;
-  vid.classList.add('switching');
+
+  var FADE = sinFade ? 0 : 600; // ms fade out
+
+  // Fade out lento
+  vid.style.transition = 'opacity ' + (FADE/1000) + 's ease';
+  vid.style.opacity = '0';
+
   setTimeout(function() {
     vid.src = anim.w;
     vid.load();
     vid.play().catch(function(){});
-    vid.classList.remove('switching');
     if (lbl) lbl.textContent = anim.n;
-  }, 200);
+    // Fade in lento una vez cargado
+    vid.oncanplay = function() {
+      vid.style.opacity = '1';
+      vid.oncanplay = null;
+    };
+    // Fallback por si oncanplay no dispara
+    setTimeout(function() { vid.style.opacity = '1'; }, 800);
+  }, FADE);
 }
 
 function iniciarRotacion(vidId, lblId, grupo, primerAnim, intervaloBase) {
-  // Detener rotación previa si existe
-  if (rotTimers[vidId]) clearInterval(rotTimers[vidId]);
+  if (rotTimers[vidId]) clearTimeout(rotTimers[vidId]);
   rotIndex[vidId] = 0;
 
   var lista = GRUPOS[grupo] || GRUPOS.idle;
 
-  // Poner la primera animación inmediatamente
-  setAnim(vidId, lblId, primerAnim || lista[0]);
+  // Precargar todo el grupo en segundo plano
+  precargarGrupo(grupo);
 
-  // Rotar cada N segundos (con variación aleatoria para que no sea robótico)
-  var base = intervaloBase || 12000;
+  // Primera animación sin fade (ya está en pantalla o es la inicial)
+  setAnim(vidId, lblId, primerAnim || lista[0], true);
+
+  var base = intervaloBase || 15000; // más lento: 15s base
 
   function siguiente() {
     rotIndex[vidId] = (rotIndex[vidId] + 1) % lista.length;
-    // Saltar el primer anim si ya se usó y no queremos repetirlo seguido
     var key = lista[rotIndex[vidId]];
+
+    // Precargar el siguiente de la cola antes de mostrarlo
+    var nextIdx = (rotIndex[vidId] + 1) % lista.length;
+    precargar(lista[nextIdx]);
+
     setAnim(vidId, lblId, key);
-    // Intervalo variable: entre base y base+5s
-    var siguiente_ms = base + Math.floor(Math.random() * 5000);
+    var siguiente_ms = base + Math.floor(Math.random() * 6000);
     rotTimers[vidId] = setTimeout(siguiente, siguiente_ms);
   }
 
-  var primer_intervalo = base + Math.floor(Math.random() * 4000);
+  var primer_intervalo = base + Math.floor(Math.random() * 5000);
   rotTimers[vidId] = setTimeout(siguiente, primer_intervalo);
 }
 
@@ -339,10 +377,11 @@ function pararRotacion(vidId) {
 // Animación puntual: reproduce una anim específica y luego retoma la rotación
 function animPuntual(vidId, lblId, animKey, grupo, durSegundos) {
   pararRotacion(vidId);
+  precargar(animKey);
   setAnim(vidId, lblId, animKey);
   setTimeout(function() {
-    iniciarRotacion(vidId, lblId, grupo, null, 12000);
-  }, (durSegundos || ANIMS[animKey].d || 4) * 1000 + 500);
+    iniciarRotacion(vidId, lblId, grupo, null, 15000);
+  }, (durSegundos || ANIMS[animKey].d || 4) * 1000 + 800);
 }
 
 // ═══════════════════════════════════════
