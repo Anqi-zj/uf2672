@@ -637,7 +637,7 @@ function mostrarInicio(){
         vidA.oncanplay=function(){
           vidA.oncanplay=null;
           vidA.play().catch(function(){});
-          speak(r(FRASES.saludo)(al,ag),'voz-inicio');
+          setTimeout(function(){speak(r(FRASES.saludo)(al,ag),'voz-inicio');},50);
           vidA.onended=function(){
             vidA.onended=null;
             iniciarRotacion('vid-inicio','lbl-inicio','idle','idle',18000);
