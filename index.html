@@ -619,36 +619,26 @@ function mostrarInicio(){
   var next=caps.find(function(c){return!isC(c.id);});
   var esFin=!next;
 
-  var yaHablado=sessionStorage.getItem('uf_saludo');
   if(esFin){
     if(msg)msg.innerHTML='🎖️ <strong style="color:#e8c96a;">'+al+'</strong>, ¡curso completado!';
     iniciarRotacion('vid-inicio','lbl-inicio','idle','perfecto',14000);
-    if(!yaHablado){
-      sessionStorage.setItem('uf_saludo','1');
-      setTimeout(function(){speak(r(FRASES.saludoFin)(al),'voz-inicio');},300);
-    }
   }else{
     if(msg)msg.innerHTML='Hola <strong style="color:#e8c96a;">'+al+'</strong>. Soy <strong style="color:#c9a84c;">'+ag+'</strong>.<br>Tu siguiente paso es <strong>Capítulo '+next.id.replace('c','')+' </strong>. Pulsa sobre él para comenzar.';
-    if(!yaHablado){
-      sessionStorage.setItem('uf_saludo','1');
-      var vidA=document.getElementById('vid-inicio-a');
-      if(vidA){
-        vidA.src='./WEBM/Saludo.webm';
-        vidA.loop=false;
-        vidA.playbackRate=0.5;
-        vidA.style.opacity='1';
-        vidA.load();
-        vidA.oncanplay=function(){
-          vidA.oncanplay=null;
-          vidA.play().catch(function(){});
-          vidA.onended=function(){
-            vidA.onended=null;
-            iniciarRotacion('vid-inicio','lbl-inicio','idle','idle',18000);
-          };
+    var vidA=document.getElementById('vid-inicio-a');
+    if(vidA){
+      vidA.src='./WEBM/Saludo.webm';
+      vidA.loop=false;
+      vidA.playbackRate=0.5;
+      vidA.style.opacity='1';
+      vidA.load();
+      vidA.oncanplay=function(){
+        vidA.oncanplay=null;
+        vidA.play().catch(function(){});
+        vidA.onended=function(){
+          vidA.onended=null;
+          iniciarRotacion('vid-inicio','lbl-inicio','idle','idle',18000);
         };
-      }
-    } else {
-      iniciarRotacion('vid-inicio','lbl-inicio','idle','idle',13000);
+      };
     }
   }
 }
@@ -841,11 +831,8 @@ window.addEventListener('DOMContentLoaded',function(){
     if(!b){if(age)age.style.borderColor='#cc4444';return;}
     localStorage.setItem('uf_al',a);localStorage.setItem('uf_ag',b);
     setChips();
-    if(!sessionStorage.getItem('uf_saludo')){
-      sessionStorage.setItem('uf_saludo','1');
-      speak(r(FRASES.saludo)(a,b),'voz-inicio');
-    }
     mostrarInicio();
+    speak(r(FRASES.saludo)(a,b),'voz-inicio');
   });
   var btnCambiar=document.getElementById('btn-cambiar');
   if(btnCambiar)btnCambiar.addEventListener('click',function(){
